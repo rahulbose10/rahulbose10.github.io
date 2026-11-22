@@ -202,6 +202,14 @@ section{padding:90px 5vw;max-width:1200px;margin:0 auto;position:relative}
 .card p{color:var(--text);font-size:15px;margin-bottom:16px;transform:translateZ(18px)}
 .card p code{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--green);
   background:rgba(57,255,142,.07);padding:1px 5px;border:1px solid rgba(57,255,142,.18)}
+.card .meta{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:#b98bff;margin:-4px 0 12px;transform:translateZ(22px)}
+.card .repo{display:inline-block;max-width:100%;overflow-wrap:anywhere;margin-top:16px;
+  font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);
+  transform:translateZ(24px);transition:color .2s,text-shadow .2s}
+.card .meta span{white-space:nowrap}
+.card .repo span{color:#8a94b0;margin-right:4px}
+.card .repo:hover{color:#fff;text-shadow:0 0 12px var(--cyan)}
 .tags{display:flex;flex-wrap:wrap;gap:8px;transform:translateZ(24px)}
 .tags i{
   font-style:normal;font-family:'Share Tech Mono',monospace;font-size:10.5px;
@@ -351,7 +359,7 @@ footer b{color:var(--green);font-weight:400}
         <span class="p">$ whoami</span><br>
         Rahul Bose — kernel-space developer from <span class="v">Kolkata, India</span>.<br><br>
         <span class="p">$ cat mission.txt</span><br>
-        I started with C and a curiosity about what happens <span class="k">below</span> the application layer. Now I build Linux kernel modules, character device drivers, and CAN bus systems on real boards — BeagleBone Black and Raspberry Pi 5 — cross-compiled from my own toolchain setup.<br><br>
+        I started with C and a curiosity about what happens <span class="k">below</span> the application layer. Now I write Linux kernel code that runs on real hardware: a CAN bus analyzer on a BeagleBone Black, process tracing with kprobes, and the eBPF sensor of a host intrusion detection system. Lately that has pulled me into ML systems too: an LLM inference engine, and the full software stack for an NPU I am designing.<br><br>
         My target: <span class="v">embedded Linux engineering</span> in automotive and semiconductor — the code inside cars, radios, and chips. Long-term destination: <span class="k">Tokyo</span>. I'm studying Japanese to get there.<br><br>
         <span class="p">$ uname -a</span><br>
         <span class="k">Linux nightcity 6.x #1 SMP PREEMPT — always</span>
@@ -373,48 +381,57 @@ footer b{color:var(--green);font-weight:400}
     <span class="path"><b>rahul@nightcity</b>:~$ ls -la /dev/projects/</span>
   </div>
   <div class="proj-grid">
-    <!-- EDIT: add/remove project cards. Copy a whole <div class="card">...</div> block. -->
+    <!-- EDIT: add/remove project cards. Copy a whole <div class="card">...</div> block.
+         Status badge: <span class="status live">COMPLETE</span> or <span class="status dev">ONGOING</span>.
+         Team projects get a <div class="meta"> line under the title.
+         A repo link goes last: <a class="repo" href="URL" target="_blank" rel="noopener"><span>github</span> repo-name</a> -->
     <div class="card flag">
-      <div class="pid"><b>PID 0001</b><span class="status dev">BUILDING</span></div>
+      <div class="pid"><b>PID 0001</b><span class="status live">COMPLETE</span></div>
       <h3>CAN Bus Analyzer</h3>
-      <p>Real-time CAN frame capture and analysis on BeagleBone Black &mdash; DCAN peripheral, SN65HVD230 transceivers, SocketCAN, device tree overlays. Built for the automotive domain: the protocol that runs inside every modern car.</p>
-      <div class="tags"><i>C</i><i>SocketCAN</i><i>BeagleBone</i><i>Device Tree</i><i>AM3358</i></div>
+      <p>A kernel module that watches a CAN bus from inside the kernel on a BeagleBone Black. It hooks DCAN1 through SocketCAN's <code>can_rx_register()</code>, filters frames with rules read under RCU, buffers them in a kfifo behind <code>/dev/can_analyzer</code>, and reports statistics through procfs, sysfs and generic netlink. On a real two-node bus it counted 20,000 back-to-back frames with none dropped, and I traced most of its latency to the CPU's deep idle state.</p>
+      <div class="tags"><i>C</i><i>SocketCAN</i><i>RCU</i><i>kfifo</i><i>Netlink</i><i>Device Tree</i><i>BeagleBone</i></div>
+      <a class="repo" href="https://github.com/rahulbose10/can-bus-analyzer" target="_blank" rel="noopener"><span>github</span> can-bus-analyzer</a>
+    </div>
+    <div class="card">
+      <div class="pid"><b>PID 0002</b><span class="status live">COMPLETE</span></div>
+      <h3>eBPF Host IDS</h3>
+      <div class="meta"><span>FIEM minor project</span>&nbsp;· <span>team of 5</span>&nbsp;· <span>Layer 1 + integration</span></div>
+      <p>Host intrusion detection built on eBPF. I built Layer 1, the kernel sensor: eBPF programs, mostly on syscall tracepoints, that report execs, file and permission changes, connects, ptrace, setuid and module loads through one ring buffer, plus an opt-in BPF-LSM mode that blocks ptrace on a protected process even for root. Then I checked each layer against the shared contracts and integrated all five. All 14 detection rules have fired on the live sensor, with zero alerts over 30 minutes of normal use.</p>
+      <div class="tags"><i>C</i><i>eBPF</i><i>libbpf</i><i>BPF-LSM</i><i>Tracepoints</i><i>Ring Buffer</i></div>
+      <a class="repo" href="https://github.com/rahulbose10/ebpf-hids" target="_blank" rel="noopener"><span>github</span> ebpf-hids</a>
+    </div>
+    <div class="card">
+      <div class="pid"><b>PID 0003</b><span class="status live">COMPLETE</span></div>
+      <h3>ProcWatch</h3>
+      <p>A kernel module that traces fork, exec and exit with kprobes on <code>wake_up_new_task</code>, <code>begin_new_exec</code> and <code>do_exit</code>. Each event (PID, PPID, UID, name, timestamp) lands in a spinlock-protected ring buffer that user space reads through <code>/dev/procwatch</code>, with blocking reads and poll. A procfs file shows counts without consuming events, and a user-space daemon prints them live or as JSON.</p>
+      <div class="tags"><i>C</i><i>Kernel Module</i><i>kprobes</i><i>chardev</i><i>procfs</i><i>spinlock</i></div>
+      <a class="repo" href="https://github.com/rahulbose10/procwatch" target="_blank" rel="noopener"><span>github</span> procwatch</a>
+    </div>
+    <div class="card">
+      <div class="pid"><b>PID 0004</b><span class="status live">COMPLETE</span></div>
+      <h3>Network Threat Analyzer</h3>
+      <p>A passive network IDS in Python: it reads a pcap or a live interface and never sends a packet. Five heuristic detectors (C2 beacon timing, DNS tunnelling by Shannon entropy, port scans, ARP spoofing, cleartext credentials), each mapped to MITRE ATT&amp;CK, feed a severity engine that escalates corroborated alerts. The output is a self-contained HTML report with a threat timeline and the frame numbers behind every alert.</p>
+      <div class="tags"><i>Python</i><i>scapy</i><i>IDS</i><i>MITRE ATT&amp;CK</i><i>Detection Engineering</i></div>
+      <a class="repo" href="https://github.com/rahulbose10/network-threat-analyzer" target="_blank" rel="noopener"><span>github</span> network-threat-analyzer</a>
     </div>
     <div class="card flag">
-      <div class="pid"><b>PID 0002</b><span class="status dev">BUILDING</span></div>
+      <div class="pid"><b>PID 0005</b><span class="status dev">ONGOING</span></div>
+      <h3>Paged Speculative Inference Engine</h3>
+      <div class="meta"><span>PSIE</span>&nbsp;· <span>FIEM major project</span>&nbsp;· <span>team of 5</span>&nbsp;· <span>Lane 1 + integration</span></div>
+      <p>An LLM inference engine that serves Qwen2.5-3B in 4-bit NF4, with a 0.5B draft model for speculative decoding, on a 4 GB laptop GPU. My lane is the engine core: a refcounted block allocator, the paged KV cache with copy-on-write and swap paths, paged attention over grouped-query heads, the speculative rejection sampler and the engine loop. A wrong sampler still writes fluent text, so correctness is judged statistically, against thresholds fixed before the code existed.</p>
+      <div class="tags"><i>Python</i><i>PyTorch</i><i>Paged Attention</i><i>KV Cache</i><i>Speculative Decoding</i></div>
+    </div>
+    <div class="card">
+      <div class="pid"><b>PID 0006</b><span class="status dev">ONGOING</span></div>
+      <h3>Full-Stack NPU</h3>
+      <p>Designing a small neural processing unit and building the software stack a chip vendor ships with one: the chip as a PCIe device emulated in QEMU, a Linux DRM accel kernel driver, a user-mode driver, an ONNX compiler in Rust, a graph runtime and an ONNX Runtime execution provider. Each layer is checked against a bit-exact golden model written separately from the device, and every performance number comes from a cycle model, labeled as modeled.</p>
+      <div class="tags"><i>C</i><i>C++</i><i>Rust</i><i>QEMU</i><i>DRM accel</i><i>ONNX Runtime</i></div>
+    </div>
+    <div class="card">
+      <div class="pid"><b>PID 0007</b><span class="status dev">ONGOING</span></div>
       <h3>AUTOSAR-Style RTE</h3>
-      <p>An educational automotive stack in C++: an ARXML-driven code generator that emits the Runtime Environment gluing software components to a fixed-priority OS and a BSW slice (COM, NVM, DEM). Sender-receiver and client-server ports, exclusive areas over priority-ceiling resources, and remapping one ECU to two by changing only the ARXML.</p>
+      <p>Building an AUTOSAR-inspired automotive stack in C++, educational and not certified: an ARXML-driven code generator that emits the Runtime Environment connecting software components to a fixed-priority OS and a slice of basic software (COM, NVM, DEM). Sender-receiver and client-server ports, exclusive areas over priority-ceiling resources, and remapping one ECU to two by changing only the ARXML.</p>
       <div class="tags"><i>C++</i><i>AUTOSAR</i><i>Code Generation</i><i>ARXML</i><i>RTOS Concepts</i><i>Automotive</i></div>
-    </div>
-    <div class="card">
-      <div class="pid"><b>PID 0003</b><span class="status dev">BUILDING</span></div>
-      <h3>eBPF Host IDS</h3>
-      <p>Host-based intrusion detection built on eBPF &mdash; attaching programs to kernel hooks to trace syscalls and process behaviour in real time, streaming events out to a detection layer without patching the kernel.</p>
-      <div class="tags"><i>eBPF</i><i>C</i><i>Kernel Hooks</i><i>Syscall Tracing</i><i>Security</i></div>
-    </div>
-    <div class="card">
-      <div class="pid"><b>PID 0004</b><span class="status dev">BUILDING</span></div>
-      <h3>Linux IPC Framework</h3>
-      <p>Multi-method kernel module implementing three IPC channels: character device, shared-memory ring buffer, and generic netlink &mdash; with kfifo, waitqueues, and proper concurrency handling in kernel space.</p>
-      <div class="tags"><i>Kernel Module</i><i>chardev</i><i>netlink</i><i>kfifo</i><i>mmap</i></div>
-    </div>
-    <div class="card">
-      <div class="pid"><b>PID 0005</b><span class="status live">COMPLETE</span></div>
-      <h3>ProcWatch</h3>
-      <p>Real-time Linux process monitor. A kernel module hooks fork, exec and exit events into a lock-free ring buffer, exposed to user space through a character device (<code>/dev/procwatch</code>), a procfs statistics interface, and ioctl controls &mdash; with a user-space daemon and live dashboard on top.</p>
-      <div class="tags"><i>Kernel Module</i><i>chardev</i><i>procfs</i><i>ring buffer</i><i>ioctl</i><i>C</i></div>
-    </div>
-    <div class="card">
-      <div class="pid"><b>PID 0006</b><span class="status live">COMPLETE</span></div>
-      <h3>Network Threat Analyzer</h3>
-      <p>An offline, read-only pcap mini-IDS in Python. Five behavioural detectors &mdash; C2 beacon timing analysis, DNS tunnelling by Shannon entropy, port scans, ARP spoofing, and cleartext credential leaks &mdash; feed a severity engine with corroboration, producing a self-contained SOC-style HTML report with a threat timeline and per-alert evidence. Purely passive: it reads captures, never sends a packet.</p>
-      <div class="tags"><i>Python</i><i>scapy</i><i>IDS</i><i>MITRE ATT&amp;CK</i><i>Detection Engineering</i></div>
-    </div>
-    <div class="card">
-      <div class="pid"><b>PID 0007</b><span class="status plan">IN PIPELINE</span></div>
-      <h3>USB Gadget Driver</h3>
-      <p>Custom USB gadget on Raspberry Pi 5 &mdash; making the Pi appear as a USB device to a host machine, built on the kernel's gadget framework and cross-compiled from an Ubuntu toolchain.</p>
-      <div class="tags"><i>USB Gadget</i><i>RPi 5</i><i>Cross-compile</i><i>UDC</i></div>
     </div>
   </div>
 </section>
@@ -431,8 +448,9 @@ footer b{color:var(--green);font-weight:400}
       <h3>// Kernel Space</h3>
       <ul>
         <li>Linux kernel modules</li>
-        <li>Character device drivers</li>
-        <li>kprobes &amp; tracing</li>
+        <li>Character devices · ioctl · netlink</li>
+        <li>eBPF · libbpf · BPF-LSM</li>
+        <li>kprobes &amp; tracepoints</li>
         <li>procfs / sysfs / seq_file</li>
         <li>Device tree &amp; overlays</li>
         <li>kfifo · RCU · hrtimer</li>
@@ -529,7 +547,7 @@ footer b{color:var(--green);font-weight:400}
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ============================================================
-   WEBGL SCENE — synthwave terrain + particle field (Three.js)
+   WEBGL SCENE: neural lattice, star dust, touch ripples (Three.js)
    ============================================================ */
 (function(){
   if(reduce||typeof THREE==='undefined')return;
@@ -705,9 +723,9 @@ if(!reduce&&matchMedia('(hover:hover)').matches){
 /* ---- kernel boot sequence ---- */
 const bootLines=[
  ["t","[    0.000000] "],["g","Booting Linux on physical CPU 0x0"],
- ["t","[    0.001337] "],["g","Machine model: Rahul Bose // Portfolio v2.0 [WebGL]"],
+ ["t","[    0.001337] "],["g","Machine model: Rahul Bose // Portfolio v3.1 [WebGL]"],
  ["t","[    0.002048] "],["g","can: controller area network core (rev 20230415)"],
- ["t","[    0.003141] "],["g","ipc_framework: chardev + shm + netlink registered"],
+ ["t","[    0.003141] "],["g","ebpf: sensor attached to syscall tracepoints"],
  ["t","[    0.004096] "],["warn","ambition: level exceeds safe thresholds — continuing anyway"],
  ["t","[    0.005120] "],["g","jlpt_n5: module loaded — 日本語学習中"],
  ["t","[    0.006666] "],["ok","[ OK ] neural lattice online — 230 nodes linked"],
