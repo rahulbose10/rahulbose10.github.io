@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RAHUL BOSE // Kernel Hacker</title>
-<meta name="description" content="Rahul Bose — Embedded Linux Kernel Engineer. CAN bus, device drivers, kernel modules. Kolkata → Tokyo.">
+<meta name="description" content="Rahul Bose, embedded Linux kernel developer. CAN bus, eBPF, device drivers and kernel modules on real hardware. MCA student in Kolkata, India.">
 <!-- ============================================================
-     EDIT GUIDE — everything you'll want to change is marked with
+     EDIT GUIDE: everything you'll want to change is marked with
      "EDIT:" comments. Search for "EDIT:" in this file.
      Tech: WebGL (Three.js) 3D background + vanilla JS. No build
-     step needed — host as a single file on GitHub Pages.
+     step needed. Host it as a single file on GitHub Pages.
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -336,7 +336,7 @@ footer b{color:var(--green);font-weight:400}
   <h1><span class="glitch" data-text="RAHUL BOSE">RAHUL BOSE</span></h1>
   <div class="role">EMBEDDED LINUX // KERNEL SPACE // カーネルハッカー</div>
   <!-- EDIT: your one-line intro below -->
-  <p class="tag">I write code that talks to silicon — <b>kernel modules, device drivers, CAN bus</b> on real hardware. MCA student in Kolkata, building toward embedded systems engineering and, one day, an engineering life in <b>Japan</b>.</p>
+  <p class="tag">I write code that talks to silicon: <b>kernel modules, device drivers, CAN bus</b> on real hardware. MCA student in Kolkata, building toward embedded systems engineering.</p>
   <div class="hero-cta">
     <a class="btn" href="#projects">View Projects</a>
     <a class="btn c" href="#contact">Connect</a>
@@ -353,21 +353,21 @@ footer b{color:var(--green);font-weight:400}
   </div>
   <div class="about-grid">
     <div class="term">
-      <div class="term-bar"><i></i><i></i><i></i><span>bash — identity.sh</span></div>
+      <div class="term-bar"><i></i><i></i><i></i><span>bash · identity.sh</span></div>
       <div class="term-body">
         <!-- EDIT: about-me text -->
         <span class="p">$ whoami</span><br>
-        Rahul Bose — kernel-space developer from <span class="v">Kolkata, India</span>.<br><br>
+        Rahul Bose, kernel-space developer from <span class="v">Kolkata, India</span>.<br><br>
         <span class="p">$ cat mission.txt</span><br>
         I started with C and a curiosity about what happens <span class="k">below</span> the application layer. Now I write Linux kernel code that runs on real hardware: a CAN bus analyzer on a BeagleBone Black, process tracing with kprobes, and the eBPF sensor of a host intrusion detection system. Lately that has pulled me into ML systems too: an LLM inference engine, and the full software stack for an NPU I am designing.<br><br>
-        My target: <span class="v">embedded Linux engineering</span> in automotive and semiconductor — the code inside cars, radios, and chips. Long-term destination: <span class="k">Tokyo</span>. I'm studying Japanese to get there.<br><br>
+        My target: <span class="v">embedded Linux engineering</span> in automotive and semiconductor, the code inside cars, radios, and chips. I'm also learning <span class="k">Japanese</span> to work with Japanese automotive teams.<br><br>
         <span class="p">$ uname -a</span><br>
-        <span class="k">Linux nightcity 6.x #1 SMP PREEMPT — always</span>
+        <span class="k">Linux nightcity 6.x #1 SMP PREEMPT, always</span>
       </div>
     </div>
     <div class="stat-stack">
-      <div class="stat"><b>EDUCATION</b><span>MCA @ FIEM Kolkata (MAKAUT) — focus on OS, networks &amp; systems programming</span></div>
-      <div class="stat"><b>HARDWARE LAB</b><span>BeagleBone Black Rev C · Raspberry Pi 5 (8GB) · SN65HVD230 CAN transceivers · MPU6050 IMUs</span></div>
+      <div class="stat"><b>EDUCATION</b><span>MCA @ FIEM Kolkata (MAKAUT). Focus on OS, networks &amp; systems programming</span></div>
+      <div class="stat"><b>HARDWARE LAB</b><span>BeagleBone Black Rev D · SN65HVD230 CAN transceivers · CP2102 USB-serial adapter · MPU6050 IMUs</span></div>
       <div class="stat"><b>CERTIFICATIONS</b><span>Google Cybersecurity Certificate · TryHackMe Jr. Penetration Tester</span></div>
       <div class="stat"><b>LANGUAGES</b><span>Bengali · English · Hindi · 日本語 (JLPT N5 in progress)</span></div>
     </div>
@@ -381,10 +381,12 @@ footer b{color:var(--green);font-weight:400}
     <span class="path"><b>rahul@nightcity</b>:~$ ls -la /dev/projects/</span>
   </div>
   <div class="proj-grid">
-    <!-- EDIT: add/remove project cards. Copy a whole <div class="card">...</div> block.
-         Status badge: <span class="status live">COMPLETE</span> or <span class="status dev">ONGOING</span>.
-         Team projects get a <div class="meta"> line under the title.
-         A repo link goes last: <a class="repo" href="URL" target="_blank" rel="noopener"><span>github</span> repo-name</a> -->
+    <!-- EDIT: add or remove project cards. Copy one whole card, from its
+         opening div class="card" line down to its closing div, and paste it.
+         Status badge: class "status live" with COMPLETE, or "status dev" with ONGOING.
+         Team projects get a div with class "meta" under the title.
+         A repo link goes last: copy the repo line from a finished project,
+         then change the address and the name. -->
     <div class="card flag">
       <div class="pid"><b>PID 0001</b><span class="status live">COMPLETE</span></div>
       <h3>CAN Bus Analyzer</h3>
@@ -459,11 +461,10 @@ footer b{color:var(--green);font-weight:400}
     <div class="skill-box">
       <h3>// Embedded &amp; Hardware</h3>
       <ul>
-        <li>ARM (AM3358 / BCM2712)</li>
+        <li>ARM (TI AM3358)</li>
         <li>SocketCAN &amp; CAN protocol</li>
-        <li>Cross-compilation toolchains</li>
-        <li>UART · I2C · GPIO</li>
-        <li>U-Boot &amp; board bring-up</li>
+        <li>UART · GPIO</li>
+        <li>Pin muxing &amp; pad config (pinctrl)</li>
       </ul>
     </div>
     <div class="skill-box">
@@ -499,22 +500,22 @@ footer b{color:var(--green);font-weight:400}
     <div class="int-card">
       <div class="kanji">日</div>
       <h3>Japan &amp; Nihongo</h3>
-      <p>Studying Japanese toward JLPT N5, with a long-term plan to live and work in Japan. Every Sunday is language day. いつか東京で。</p>
+      <p>Studying Japanese toward JLPT N5. Every Sunday is language day. 日本語、一歩ずつ。</p>
     </div>
     <div class="int-card">
       <div class="kanji">戦</div>
       <h3>Sengoku History</h3>
-      <p>Deep fascination with Japan's Warring States era — the daimyo, the strategy, the chaos that forged a nation. History as the original strategy game.</p>
+      <p>Deep fascination with Japan's Warring States era: the daimyo, the strategy, the chaos that forged a nation. History as the original strategy game.</p>
     </div>
     <div class="int-card">
       <div class="kanji">本</div>
       <h3>Books &amp; Bookstagram</h3>
-      <p>Reading across Bengali and English literature, and sharing it at <a href="https://www.instagram.com/__._vesper_.__" target="_blank" rel="noopener">@__._vesper_.__</a> &mdash; my corner of the bookish internet.</p>
+      <p>Reading across Bengali and English literature, and sharing it at <a href="https://www.instagram.com/__._vesper_.__" target="_blank" rel="noopener">@__._vesper_.__</a>, my corner of the bookish internet.</p>
     </div>
     <div class="int-card">
       <div class="kanji">映</div>
       <h3>Anime</h3>
-      <p>Where my love of Japan started. Story-driven series over everything — the kind of worlds that make you want to learn the language they're written in.</p>
+      <p>Where my love of Japan started. Story-driven series over everything, the kind of worlds that make you want to learn the language they're written in.</p>
     </div>
   </div>
 </section>
@@ -527,7 +528,7 @@ footer b{color:var(--green);font-weight:400}
   <div class="big">JACK <em>IN</em></div>
   <p>Open to embedded Linux opportunities, kernel talk, book recommendations, and conversations about Japan. Find me on the grid:</p>
   <div class="socials">
-    <!-- EDIT: your social links — the long URL goes in href, the short label is what shows -->
+    <!-- EDIT: your social links. The long URL goes in href, the short label is what shows -->
     <a class="soc" href="https://github.com/rahulbose10" target="_blank" rel="noopener">GITHUB<small>rahulbose10</small></a>
     <a class="soc" href="https://www.linkedin.com/in/rahul-bose-40518a137/" target="_blank" rel="noopener">LINKEDIN<small>rahul-bose</small></a>
     <a class="soc" href="https://x.com/RK__Bose" target="_blank" rel="noopener">X<small>@RK__Bose</small></a>
@@ -538,7 +539,7 @@ footer b{color:var(--green);font-weight:400}
 </section>
 
 <footer>
-  <b>[ OK ]</b> system uptime: forever &nbsp;//&nbsp; WebGL · Three.js · zero frameworks &nbsp;//&nbsp; Kolkata → 東京 &nbsp;//&nbsp; © <span id="yr"></span>
+  <b>[ OK ]</b> system uptime: forever &nbsp;//&nbsp; WebGL · Three.js · zero frameworks &nbsp;//&nbsp; Built in Kolkata &nbsp;//&nbsp; © <span id="yr"></span>
 </footer>
 
 <div class="canbar" aria-hidden="true"><span id="canstream"></span></div>
@@ -566,7 +567,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   camera.lookAt(0,0,0);
 
   /* ============================================================
-     NEURAL LATTICE — a living web of light (nodes + links + signals)
+     NEURAL LATTICE: a living web of light (nodes + links + signals)
      ============================================================ */
   const lattice=new THREE.Group();
   const NODES=230,R=26;
@@ -655,7 +656,7 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
     requestAnimationFrame(loop);
     const dt=Math.min(0.05,(now-last)/1000);last=now;
     const t=now*0.001;
-    // lattice slowly thinking — speeds up when touched
+    // lattice slowly thinking, speeds up when touched
     lattice.rotation.y+=dt*(0.05+excite*0.25);
     lattice.rotation.x=Math.sin(t*0.07)*0.1+Math.min(0.4,scrollY*0.0003);
     stars.rotation.y=-t*0.008;
@@ -723,12 +724,12 @@ if(!reduce&&matchMedia('(hover:hover)').matches){
 /* ---- kernel boot sequence ---- */
 const bootLines=[
  ["t","[    0.000000] "],["g","Booting Linux on physical CPU 0x0"],
- ["t","[    0.001337] "],["g","Machine model: Rahul Bose // Portfolio v3.1 [WebGL]"],
+ ["t","[    0.001337] "],["g","Machine model: Rahul Bose // Portfolio v3.2 [WebGL]"],
  ["t","[    0.002048] "],["g","can: controller area network core (rev 20230415)"],
  ["t","[    0.003141] "],["g","ebpf: sensor attached to syscall tracepoints"],
- ["t","[    0.004096] "],["warn","ambition: level exceeds safe thresholds — continuing anyway"],
- ["t","[    0.005120] "],["g","jlpt_n5: module loaded — 日本語学習中"],
- ["t","[    0.006666] "],["ok","[ OK ] neural lattice online — 230 nodes linked"],
+ ["t","[    0.004096] "],["warn","ambition: level exceeds safe thresholds, continuing anyway"],
+ ["t","[    0.005120] "],["g","jlpt_n5: module loaded (日本語学習中)"],
+ ["t","[    0.006666] "],["ok","[ OK ] neural lattice online, 230 nodes linked"],
  ["t","[    0.007777] "],["g","login: rahul ... access granted"],
 ];
 const boot=document.getElementById('boot');
@@ -764,7 +765,7 @@ const obs=new IntersectionObserver(es=>es.forEach(e=>{
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
 /* ============================================================
-   TOUCH ENERGY — every touch ripples through the page + lattice
+   TOUCH ENERGY: every touch ripples through the page + lattice
    ============================================================ */
 if(!reduce){
   addEventListener('pointerdown',e=>{
